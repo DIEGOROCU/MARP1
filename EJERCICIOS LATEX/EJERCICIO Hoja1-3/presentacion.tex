@@ -61,7 +61,7 @@
 % Sección 2: Planteamiento
 \section{Planteamiento}
 \begin{frame}{Planteamiento}
-    \begin{exampleblock}{Definicion}
+    \begin{exampleblock}{Definicion: Método de agregación}
         Se determina una cota superior de la secuencia entera $T(n)$ para $n$ operaciones. El coste medio por operación es $T(n)/n$.
     \end{exampleblock}
     Conociendo esta definicion, para resolver este problema, debemos calcular $T(n)$ sumando los costes de cada operacion, para despues dividirlo entre $n$ y asi obtener el coste amortizado.
@@ -92,7 +92,7 @@
 % Sección 3: Resolución
 \section{Resolución}
 
-\begin{frame}{Resolución}
+\begin{frame}{Resolución: Método de agregación}
     Primero calculemos $T(n)$:
     \[
     T(n) = \sum_{i=1}^{n} C[i]

@@ -61,21 +61,19 @@
 % Sección 2: Planteamiento
 \section{Planteamiento}
 \begin{frame}{Planteamiento}
-    \begin{exampleblock}{Definicion}
-        Se determina una cota superior de la secuencia entera $T(n)$ para $n$ operaciones. El coste medio por operación es $T(n)/n$.
+    \begin{exampleblock}{Definicion: Método del potencial}
+        Igual que el método de contabilidad, pero guardando el prepago como “potencial” de la estructura de datos en su conjunto, en lugar de asignarlo a elementos concretos de la misma.
+
     \end{exampleblock}
-    Conociendo esta definicion, para resolver este problema, debemos calcular $T(n)$ sumando los costes de cada operacion, para despues dividirlo entre $n$ y asi obtener el coste amortizado.\\
-    Lo haremos mediante un metodo similar al del contador binario visto en clase, pero adaptado a bases arbitrarias, por lo que calcularemos el coste amortizado de la operacion aproximando la cantidad de veces que se reinicia cada cifra del contador.
+    Conociendo esta definicion, debemos calcular el coste amortizado de la operacion $\texttt{incr}$ definiendo una funcion potencial adecuada.\\
 \end{frame}
 \begin{frame}{Planteamiento}
     \begin{exampleblock}{Definición}
         El contador generalizado en bases $b$ se comporta de la siguiente forma:\\
         Al incrementar, se suma $1$ a la cifra menos significativa, y si se alcanza el máximo en esa posición, se reinicia a $0$ y se incrementa la siguiente cifra, y así sucesivamente.
     \end{exampleblock}
-    Por tanto, el coste real de la operacion $\texttt{incr}$ es $1$ mas el numero de cifras que se reinician a $0$.
+    Por tanto, el coste real de la operacion $\texttt{incr}$ es $1$ mas el numero de cifras que se reinician a $0$.\\.
 \end{frame}
-
-
 
 \begin{frame}{Ejemplos visuales}
     \begin{table}
@@ -143,13 +141,22 @@
 \section{Resolución}
 
 \begin{frame}{Resolución: Método del potencial}
-    Definimos una función potencial $\Phi(v)$ como el número de cifras distintas de $0$ en el contador $v$. Cada vez que incrementamos, el coste real es igual al número de cifras que se ponen a $0$ más $1$ (la cifra que se incrementa sin reiniciar).
+    Definimos una función potencial $\Phi(D_i)$ como el número de cifras distintas de $0$ en el contador tras la $i$-ésima operación. Sea $D_{i-1}$ el estado antes de la operación $i$ y $D_i$ el estado después.\\
     
-    El coste amortizado de una operación es:
+    Comprobemos las propiedades de la función potencial:
+    \begin{itemize}
+        \item $\Phi(D_0) = 0$, ya que el contador comienza en $0$.
+        \item $\Phi(D_i) \geq \Phi(D_0) = 0$ para todo $i$, ya que el número de cifras distintas de $0$ no puede ser negativo.
+        \item En particular, $\Phi(D_n) \geq \Phi(D_0) = 0$. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cálculo del coste amortizado}
+    Aplicando el método, el coste amortizado de la operación $i$ es:
     \[
-    \hat{c} = c + \Phi(v') - \Phi(v)
+    \hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1})
     \]
-    donde $c$ es el coste real, $v$ el estado antes de la operación y $v'$ después.
+    donde $c_i$ es el coste real de la operación $i$.
 \end{frame}
 
 \begin{frame}{Cálculo del coste amortizado}
