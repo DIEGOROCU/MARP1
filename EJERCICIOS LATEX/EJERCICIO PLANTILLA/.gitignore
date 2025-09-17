@@ -1,0 +1,36 @@
+# Archivos generados por LaTeX
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.idx
+*.ind
+*.ilg
+*.lof
+*.lot
+*.lol
+
+# Archivos de respaldo
+*~
+*.bak
+*.backup
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos del editor
+*.swp
+*.swo
+*~
+
+# Carpetas de salida (opcional - descomenta si no quieres versionar PDFs)
+# *.pdf
