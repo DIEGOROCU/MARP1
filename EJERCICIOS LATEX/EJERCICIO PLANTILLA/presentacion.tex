@@ -1,0 +1,172 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+% Información del documento
+\title{Título de la Presentación}
+\subtitle{Subtítulo (opcional)}
+\author{Tu Nombre}
+\institute{Universidad/Institución}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1
+\section{Introducción}
+
+\begin{frame}{Introducción}
+    \begin{itemize}
+        \item Primer punto importante
+        \item Segundo punto con \textbf{énfasis}
+        \item Tercer punto con \textit{cursiva}
+        \item Cuarto punto con \textcolor{red}{color}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Marco Teórico}
+    \begin{block}{Definición}
+        Aquí puedes colocar una definición importante.
+    \end{block}
+    
+    \begin{alertblock}{Atención}
+        Información que requiere atención especial.
+    \end{alertblock}
+    
+    \begin{exampleblock}{Ejemplo}
+        Un ejemplo práctico de la teoría.
+    \end{exampleblock}
+\end{frame}
+
+% Sección 2
+\section{Desarrollo}
+
+\begin{frame}{Matemáticas}
+    \begin{itemize}
+        \item Ecuación en línea: $E = mc^2$
+        \item Ecuación centrada:
+        \begin{equation}
+            \sum_{i=1}^{n} x_i = \frac{n(n+1)}{2}
+        \end{equation}
+        \item Sistema de ecuaciones:
+        \begin{align}
+            x + y &= 5 \\
+            2x - y &= 1
+        \end{align}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Código}
+    \begin{lstlisting}[language=Python, caption=Ejemplo de código Python]
+def fibonacci(n):
+    """Calcula el n-ésimo número de Fibonacci"""
+    if n <= 1:
+        return n
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)
+
+# Ejemplo de uso
+print(fibonacci(10))
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Imágenes}
+    \begin{figure}
+        \centering
+        % Descomenta la siguiente línea y coloca tu imagen en la carpeta images/
+        % \includegraphics[width=0.6\textwidth]{images/ejemplo.png}
+        \caption{Ejemplo de imagen (sustituir por imagen real)}
+    \end{figure}
+\end{frame}
+
+% Sección 3
+\section{Resultados}
+
+\begin{frame}{Tabla de Resultados}
+    \begin{table}
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Algoritmo} & \textbf{Tiempo (ms)} & \textbf{Precisión} \\
+            \hline
+            Algoritmo A & 150 & 95\% \\
+            \hline
+            Algoritmo B & 200 & 98\% \\
+            \hline
+            Algoritmo C & 120 & 92\% \\
+            \hline
+        \end{tabular}
+        \caption{Comparación de algoritmos}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Gráficos}
+    \begin{center}
+        % Aquí podrías incluir gráficos generados con TikZ o imágenes
+        \textit{Espacio reservado para gráficos}
+    \end{center}
+\end{frame}
+
+% Sección 4
+\section{Conclusiones}
+
+\begin{frame}{Conclusiones}
+    \begin{enumerate}
+        \item Primera conclusión importante
+        \item Segunda conclusión con implicaciones
+        \item Tercera conclusión y trabajo futuro
+    \end{enumerate}
+    
+    \vspace{1cm}
+    
+    \begin{center}
+        \large \textbf{¡Gracias por su atención!}
+    \end{center}
+\end{frame}
+
+% Referencias (opcional)
+\begin{frame}{Referencias}
+    \begin{thebibliography}{99}
+        \bibitem{ref1} Autor, A. (2023). \textit{Título del artículo}. Revista Científica, 1(1), 1-10.
+        \bibitem{ref2} Autor, B. (2022). \textit{Título del libro}. Editorial Académica.
+    \end{thebibliography}
+\end{frame}
+
+\end{document}
