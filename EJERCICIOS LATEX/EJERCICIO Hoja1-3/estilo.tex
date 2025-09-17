@@ -1,0 +1,70 @@
+% Archivo de configuración de estilo personalizado
+% Para usar este archivo, agrega \input{config/estilo.tex} después de \documentclass en presentacion.tex
+
+% Configuración de colores personalizados
+\definecolor{azulUni}{RGB}{0, 51, 102}
+\definecolor{grisClaro}{RGB}{240, 240, 240}
+\definecolor{verdeExito}{RGB}{76, 175, 80}
+\definecolor{rojoAlerta}{RGB}{244, 67, 54}
+
+% Configuración del tema personalizado (opcional)
+% \setbeamercolor{structure}{fg=azulUni}
+% \setbeamercolor{palette primary}{bg=azulUni,fg=white}
+% \setbeamercolor{palette secondary}{bg=azulUni!80,fg=white}
+% \setbeamercolor{palette tertiary}{bg=azulUni!60,fg=white}
+
+% Configuración de fuentes
+% \setbeamerfont{title}{size=\Large,series=\bfseries}
+% \setbeamerfont{frametitle}{size=\large,series=\bfseries}
+
+% Configuración de la numeración de diapositivas
+\setbeamertemplate{footline}[frame number]
+
+% Eliminar iconos de navegación
+\setbeamertemplate{navigation symbols}{}
+
+% Configuración de itemize
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{itemize item}{fg=azulUni}
+
+% Configuración de bloques
+\setbeamercolor{block title}{bg=azulUni,fg=white}
+\setbeamercolor{block body}{bg=grisClaro,fg=black}
+
+\setbeamercolor{block title alerted}{bg=rojoAlerta,fg=white}
+\setbeamercolor{block body alerted}{bg=rojoAlerta!10,fg=black}
+
+\setbeamercolor{block title example}{bg=verdeExito,fg=white}
+\setbeamercolor{block body example}{bg=verdeExito!10,fg=black}
+
+% Configuración de código (complementa listings)
+\lstdefinestyle{miestilo}{
+    backgroundcolor=\color{grisClaro},
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{orange},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+% Aplicar el estilo por defecto
+\lstset{style=miestilo}
+
+% Comando personalizado para resaltar texto importante
+\newcommand{\importante}[1]{\textcolor{rojoAlerta}{\textbf{#1}}}
+
+% Comando para notas al pie más elegantes
+\newcommand{\fuente}[1]{\footnotetext{\tiny #1}}
+
+% Configuración para ecuaciones numeradas
+\setbeamertemplate{theorems}[numbered]

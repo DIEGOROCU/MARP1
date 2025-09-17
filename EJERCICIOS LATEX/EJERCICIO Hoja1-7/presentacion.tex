@@ -1,0 +1,176 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+% Información del documento
+\title{Hoja 1: Ejercicio 7}
+\subtitle{Ejercicios de análisis amortizado}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1: Enunciado del problema
+\section{Enunciado del problema}
+\begin{frame}{Enunciado del problema}
+    \begin{block}{Ejercicio 7}
+        Dado un vector $b[0..n-1]$ de enteros mayores que $1$, llamado de bases, un vector $v[0..n-1]$ con $0 \leq v[i] < b[i]$, para todo $i$, representará el valor de un contador expresado en bases $b$, siendo $v[0]$ la cifra menos significativa. El valor del contador viene dado por el sumatorio $\sum_{i=0}^{n-1} \left(v[i] \cdot \prod_{j=0}^{i-1} b[j]\right)$. Implementa la operación $\texttt{incr}$, que incrementa el contador en una unidad, admitiéndose que cuando el contador tenga su valor máximo, $\forall i \in 0..n-1,\ v[i] = b[i] - 1$, al incrementarlo pase a valer $0$, o sea $\forall i \in 0..n-1,\ v[i] = 0$. Demuestra con cualquiera de los métodos vistos en clase, que el coste amortizado de la operación $\texttt{incr}$ está en $O(1)$.
+    \end{block}
+\end{frame}
+
+% Sección 2: Planteamiento
+\section{Planteamiento}
+\begin{frame}{Planteamiento}
+    \begin{exampleblock}{Definicion}
+        Se determina una cota superior de la secuencia entera $T(n)$ para $n$ operaciones. El coste medio por operación es $T(n)/n$.
+    \end{exampleblock}
+    Conociendo esta definicion, para resolver este problema, debemos calcular $T(n)$ sumando los costes de cada operacion, para despues dividirlo entre $n$ y asi obtener el coste amortizado.\\
+    Lo haremos mediante un metodo similar al del contador binario visto en clase, pero adaptado a bases arbitrarias, por lo que calcularemos el coste amortizado de la operacion aproximando la cantidad de veces que se reinicia cada cifra del contador.
+\end{frame}
+\begin{frame}{Planteamiento}
+    \begin{exampleblock}{Definición}
+        El contador generalizado en bases $b$ se comporta de la siguiente forma:\\
+        Al incrementar, se suma $1$ a la cifra menos significativa, y si se alcanza el máximo en esa posición, se reinicia a $0$ y se incrementa la siguiente cifra, y así sucesivamente.
+    \end{exampleblock}
+    Por tanto, el coste real de la operacion $\texttt{incr}$ es $1$ mas el numero de cifras que se reinician a $0$.
+\end{frame}
+
+
+
+\begin{frame}{Ejemplos visuales}
+    \begin{table}
+        \centering
+    {\footnotesize
+        \begin{tabular}{|c|c|c|}
+            \hline
+            	\textbf{Op.} & \textbf{Contador} & \textbf{Coste real} \\
+            \hline
+            1 & (0,0,0) & 1 \\
+            2 & (1,0,0) & 1 \\
+            3 & (2,0,0) & 1 \\
+            4 & (0,1,0) & 2 \\
+            5 & (1,1,0) & 1 \\
+            6 & (2,1,0) & 1 \\
+            7 & (0,0,1) & 3 \\
+            8 & (1,0,1) & 1 \\
+            9 & (2,0,1) & 1 \\
+            10 & (0,1,1) & 2 \\
+            11 & (1,1,1) & 1 \\
+            12 & (2,1,1) & 1 \\
+            13 & (0,0,0) & 3 \\
+            \ldots & \ldots & \ldots \\
+            \hline
+        \end{tabular}
+        }
+        \caption{Ejemplo de incrementos en un contador con $b = (3,2,2)$}
+    \end{table}
+\end{frame}
+
+
+\begin{frame}{}
+    \begin{table}
+        \centering
+        {\small
+        \begin{tabular}{|c|c|c|}
+            \hline
+            	\textbf{Op.} & \textbf{Contador} & \textbf{Coste real} \\
+            \hline
+            1 & (0,0,0) & 1 \\
+            2 & (1,0,0) & 1 \\
+            3 & (0,1,0) & 2 \\
+            4 & (1,1,0) & 1 \\
+            5 & (0,2,0) & 2 \\
+            6 & (1,2,0) & 1 \\
+            7 & (0,3,0) & 2 \\
+            8 & (1,3,0) & 1 \\
+            9 & (0,0,1) & 3 \\
+            10 & (1,0,1) & 1 \\
+            11 & (0,1,1) & 2 \\
+            12 & (1,1,1) & 1 \\
+            13 & (0,2,1) & 2 \\
+            14 & (1,2,1) & 1 \\
+            15 & (0,3,1) & 2 \\
+            16 & (1,3,1) & 1 \\
+            \ldots & \ldots & \ldots \\
+            \hline
+        \end{tabular}
+        }
+        \caption{Ejemplo de incrementos en un contador con $b = (2,4,2)$}
+    \end{table}
+\end{frame}
+
+% Sección 3: Resolución
+\section{Resolución}
+
+\begin{frame}{Resolución: Método del potencial}
+    Definimos una función potencial $\Phi(v)$ como el número de cifras distintas de $0$ en el contador $v$. Cada vez que incrementamos, el coste real es igual al número de cifras que se ponen a $0$ más $1$ (la cifra que se incrementa sin reiniciar).
+    
+    El coste amortizado de una operación es:
+    \[
+    \hat{c} = c + \Phi(v') - \Phi(v)
+    \]
+    donde $c$ es el coste real, $v$ el estado antes de la operación y $v'$ después.
+\end{frame}
+
+\begin{frame}{Cálculo del coste amortizado}
+    Cuando se incrementa el contador:
+    \begin{itemize}
+        \item Se ponen a $0$ $k$ cifras (las menos significativas), y se incrementa la siguiente ($k$ puede ser $0$ si no hay acarreo).
+        \item El coste real es $k+1$.
+        \item La función potencial disminuye en $k-1$ (pues se ponen a $0$ $k$ cifras y una pasa de $0$ a $1$).
+    \end{itemize}
+    Por tanto:
+    \[
+    \hat{c} = (k+1) + (1-k) = 2
+    \]
+    Así, el coste amortizado es $2$ para cualquier operación $\texttt{incr}$, es decir, $O(1)$.
+\end{frame}
+
+
+% Sección 4: Conclusión
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    Hemos demostrado que, para un contador en bases arbitrarias, la operación $\texttt{incr}$ tiene coste amortizado $O(1)$ usando el método del potencial. Esto significa que, aunque algunas operaciones puedan requerir reiniciar varias cifras, el coste promedio por operación sigue siendo constante.
+\end{frame}
+
+\end{document}

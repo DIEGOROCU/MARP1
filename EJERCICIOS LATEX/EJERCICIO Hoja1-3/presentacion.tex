@@ -1,0 +1,145 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+% Información del documento
+\title{Hoja 1: Ejercicio 3}
+\subtitle{Ejercicios de análisis amortizado}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1: Enunciado del problema
+\section{Enunciado del problema}
+\begin{frame}{Enunciado del problema}
+    \begin{block}{Ejercicio 3}
+        Se realiza una secuencia de $n$ operaciones sobre una estructura de datos. La operación i-ésima tiene un coste igual a i si i es una potencia de $2$ y, en caso contrario, igual a $1$. Utilizar el método de agregación para determinar el coste amortizado de las operaciones.
+    \end{block}
+\end{frame}
+
+% Sección 2: Planteamiento
+\section{Planteamiento}
+\begin{frame}{Planteamiento}
+    \begin{exampleblock}{Definicion}
+        Se determina una cota superior de la secuencia entera $T(n)$ para $n$ operaciones. El coste medio por operación es $T(n)/n$.
+    \end{exampleblock}
+    Conociendo esta definicion, para resolver este problema, debemos calcular $T(n)$ sumando los costes de cada operacion, para despues dividirlo entre $n$ y asi obtener el coste amortizado.
+\end{frame}
+
+\begin{frame}{Ejemplo visual}
+    \begin{table}
+        \centering
+        \begin{tabular}{|c|c|}
+            \hline
+            \textbf{Operación (i)} & \textbf{Coste} \\
+            \hline
+            1 & 1 \\
+            \textbf{2} & \textbf{2} \\
+            3 & 1 \\
+            \textbf{4} & \textbf{4} \\
+            5 & 1 \\
+            6 & 1 \\
+            7 & 1 \\
+            \textbf{8} & \textbf{8} \\
+            \ldots & \ldots \\
+            \hline
+        \end{tabular}
+        \caption{Coste de las primeras operaciones}
+    \end{table}
+\end{frame}
+
+% Sección 3: Resolución
+\section{Resolución}
+
+\begin{frame}{Resolución}
+    Primero calculemos $T(n)$:
+    \[
+    T(n) = \sum_{i=1}^{n} C[i]
+    \]
+    Donde:
+    \[
+    C[i] = 
+    \begin{cases}
+        i & \text{si } i \text{ es potencia de } 2 \\
+        1 & \text{en caso contrario}
+    \end{cases}
+    \]
+\end{frame}
+
+\begin{frame}{Separación de la suma}
+    Para ello, dividamos la suma en dos partes: las operaciones que son potencias de $2$ y las que no lo son.
+    \[
+    T(n) = \sum_{\substack{i=1 \\ i \text{ no es potencia de } 2}}^{n} 1 + \sum_{\substack{i=1 \\ i \text{ es potencia de } 2}}^{n} i = \underbrace{P(n)}_{\text{no potencias de } 2} + \underbrace{Q(n)}_{\text{potencias de } 2}
+    \]
+\end{frame}
+
+\begin{frame}{Desarrollo de los sumatorios}
+    Podemos acotar $P(n)$ y $Q(n)$:
+    \begin{itemize}
+        \item $P(n) \leq n$ \\
+        Como mucho haremos $n$ operaciones, de las cuales no todas son potencias de $2$, por lo que el coste total de estas operaciones (todas de coste constante $O(1)$) no puede superar $n$, así obtenemos el coste de todas estas operaciones.
+        \item $Q(n) \leq 2n$ \\
+        Esta desigualdad se puede probar trivialmente por induccion sobre la serie $\sum_{k=0}^{m} 2^k = 2^{m+1} - 1$. Siendo $m$ el mayor exponente de $2$ tal que $2^m \leq n$. Por lo que el coste total de las operaciones que son potencias de $2$ no puede superar $2n \geq 2^{m+1}$. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cota final del coste total}
+    Sumando ambas cotas, obtenemos:
+    \[
+    T(n) = P(n) + Q(n) \leq n + 2n = 3n
+    \]
+    Por lo tanto, el coste amortizado por operación es:
+    \[
+    \frac{T(n)}{n} \leq \frac{3n}{n} = 3
+    \]
+    Así, el coste amortizado de cada operación es $O(1)$.
+\end{frame}
+
+% Sección 4: Conclusión
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    En este ejercicio hemos analizado el coste amortizado de una secuencia de operaciones sobre una estructura de datos. Utilizando el método de agregación, hemos llegado a la conclusión de que el coste amortizado por operación es $O(1)$, lo que implica que, a pesar de que algunas operaciones pueden ser costosas, el coste promedio se mantiene constante.
+\end{frame}
+
+\end{document}

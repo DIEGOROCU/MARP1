@@ -1,0 +1,13 @@
+# Esta carpeta está destinada para almacenar imágenes de la presentación
+# 
+# Formatos recomendados:
+# - PDF (vectorial, ideal para diagramas y gráficos)
+# - PNG (para capturas de pantalla e imágenes con transparencia)
+# - JPG (para fotografías)
+# 
+# Evita:
+# - BMP (archivos muy grandes)
+# - GIF (calidad limitada)
+# 
+# Ejemplo de uso en LaTeX:
+# \includegraphics[width=0.8\textwidth]{images/mi_imagen.png}
