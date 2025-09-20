@@ -29,7 +29,6 @@
 
 #include <tuple>
 
-
 using namespace std;
 
 /*@ <answer>

@@ -118,9 +118,11 @@
     Podemos acotar $P(n)$ y $Q(n)$:
     \begin{itemize}
         \item $P(n) \leq n$ \\
-        Como mucho haremos $n$ operaciones, de las cuales no todas son potencias de $2$, por lo que el coste total de estas operaciones (todas de coste constante $O(1)$) no puede superar $n$, así obtenemos el coste de todas estas operaciones.
+        Como mucho haremos $n$ operaciones, de las cuales no todas son potencias de $2$, por lo que el coste total de estas operaciones (todas de coste constante $O(1)$) no puede superar $n$, así obtenemos el coste de todas estas operaciones.\\
+        Así, $P(n) \in O(n)$.
         \item $Q(n) \leq 2n$ \\
-        Esta desigualdad se puede probar trivialmente por induccion sobre la serie $\sum_{k=0}^{m} 2^k = 2^{m+1} - 1$. Siendo $m$ el mayor exponente de $2$ tal que $2^m \leq n$. Por lo que el coste total de las operaciones que son potencias de $2$ no puede superar $2n \geq 2^{m+1}$. 
+        Esta desigualdad se puede probar trivialmente por induccion sobre la serie $\sum_{k=0}^{m} 2^k = 2^{m+1} - 1$. Siendo $m$ el mayor exponente de $2$ tal que $2^m \leq n$. Por lo que el coste total de las operaciones que son potencias de $2$ no puede superar $2n \geq 2^{m+1} \geq \sum_{k=0}^{m} 2^k$.\\
+        Así, $Q(n) \in O(n)$.
     \end{itemize}
 \end{frame}
 
