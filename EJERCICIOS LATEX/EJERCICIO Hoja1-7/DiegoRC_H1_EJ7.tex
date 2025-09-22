@@ -61,18 +61,19 @@
 % Sección 2: Planteamiento
 \section{Planteamiento}
 \begin{frame}{Planteamiento}
-    \begin{exampleblock}{Definicion: Método del potencial}
-        Igual que el método de contabilidad, pero guardando el prepago como “potencial” de la estructura de datos en su conjunto, en lugar de asignarlo a elementos concretos de la misma.
-
-    \end{exampleblock}
-    Conociendo esta definicion, debemos calcular el coste amortizado de la operacion $\texttt{incr}$ definiendo una funcion potencial adecuada.\\
-\end{frame}
-\begin{frame}{Planteamiento}
     \begin{exampleblock}{Definición}
         El contador generalizado en bases $b$ se comporta de la siguiente forma:\\
         Al incrementar, se suma $1$ a la cifra menos significativa, y si se alcanza el máximo en esa posición, se reinicia a $0$ y se incrementa la siguiente cifra, y así sucesivamente.
     \end{exampleblock}
     Por tanto, el coste real de la operacion $\texttt{incr}$ es $1$ mas el numero de cifras que se reinician a $0$.\\.
+\end{frame}
+
+\begin{frame}{Planteamiento}
+    \begin{exampleblock}{Definicion: Método del potencial}
+        Igual que el método de contabilidad, pero guardando el prepago como “potencial” de la estructura de datos en su conjunto, en lugar de asignarlo a elementos concretos de la misma.
+
+    \end{exampleblock}
+    Conociendo esta definicion, debemos calcular el coste amortizado de la operacion $\texttt{incr}$ definiendo una funcion potencial adecuada.\\
 \end{frame}
 
 \begin{frame}{Ejemplos visuales}
@@ -168,7 +169,10 @@
     \end{itemize}
     Por tanto:
     \[
-    \hat{c} = (k+1) + (1-k) = 2
+    \Phi(D_i) - \Phi(D_{i-1}) = \Phi(D_{i-1}) - k + 1 - \Phi(D_{i-1}) = 1 - k
+    \]
+    \[
+    \hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1}) = (k+1) + (1-k) = 2
     \]
     Así, el coste amortizado es $2$ para cualquier operación $\texttt{incr}$, es decir, $O(1)$.
 \end{frame}
