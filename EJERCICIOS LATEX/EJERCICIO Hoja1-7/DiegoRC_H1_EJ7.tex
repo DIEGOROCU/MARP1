@@ -33,7 +33,7 @@
 \subtitle{Ejercicios de análisis amortizado}
 \author{Diego Rodríguez Cubero}
 \institute{UCM}
-\date{\today}
+\date{24 de septiembre de 2025}
 
 % Logo (opcional)
 % \logo{\includegraphics[height=1cm]{images/logo.png}}
@@ -79,60 +79,59 @@
 \begin{frame}{Ejemplos visuales}
     \begin{table}
         \centering
-    {\footnotesize
-        \begin{tabular}{|c|c|c|}
-            \hline
-            	\textbf{Op.} & \textbf{Contador} & \textbf{Coste real} \\
-            \hline
-            1 & (0,0,0) & 1 \\
-            2 & (1,0,0) & 1 \\
-            3 & (2,0,0) & 1 \\
-            4 & (0,1,0) & 2 \\
-            5 & (1,1,0) & 1 \\
-            6 & (2,1,0) & 1 \\
-            7 & (0,0,1) & 3 \\
-            8 & (1,0,1) & 1 \\
-            9 & (2,0,1) & 1 \\
-            10 & (0,1,1) & 2 \\
-            11 & (1,1,1) & 1 \\
-            12 & (2,1,1) & 1 \\
-            13 & (0,0,0) & 3 \\
-            \ldots & \ldots & \ldots \\
-            \hline
-        \end{tabular}
+        {\footnotesize
+            \begin{tabular}{|c|c|c|}
+                \hline
+                \textbf{Op.} & \textbf{Contador} & \textbf{Coste real} \\
+                \hline
+                1            & (0,0,0)           & 1                   \\
+                2            & (1,0,0)           & 1                   \\
+                3            & (2,0,0)           & 1                   \\
+                4            & (0,1,0)           & 2                   \\
+                5            & (1,1,0)           & 1                   \\
+                6            & (2,1,0)           & 1                   \\
+                7            & (0,0,1)           & 3                   \\
+                8            & (1,0,1)           & 1                   \\
+                9            & (2,0,1)           & 1                   \\
+                10           & (0,1,1)           & 2                   \\
+                11           & (1,1,1)           & 1                   \\
+                12           & (2,1,1)           & 1                   \\
+                13           & (0,0,0)           & 3                   \\
+                \ldots       & \ldots            & \ldots              \\
+                \hline
+            \end{tabular}
         }
         \caption{Ejemplo de incrementos en un contador con $b = (3,2,2)$}
     \end{table}
 \end{frame}
 
-
 \begin{frame}{}
     \begin{table}
         \centering
         {\small
-        \begin{tabular}{|c|c|c|}
-            \hline
-            	\textbf{Op.} & \textbf{Contador} & \textbf{Coste real} \\
-            \hline
-            1 & (0,0,0) & 1 \\
-            2 & (1,0,0) & 1 \\
-            3 & (0,1,0) & 2 \\
-            4 & (1,1,0) & 1 \\
-            5 & (0,2,0) & 2 \\
-            6 & (1,2,0) & 1 \\
-            7 & (0,3,0) & 2 \\
-            8 & (1,3,0) & 1 \\
-            9 & (0,0,1) & 3 \\
-            10 & (1,0,1) & 1 \\
-            11 & (0,1,1) & 2 \\
-            12 & (1,1,1) & 1 \\
-            13 & (0,2,1) & 2 \\
-            14 & (1,2,1) & 1 \\
-            15 & (0,3,1) & 2 \\
-            16 & (1,3,1) & 1 \\
-            \ldots & \ldots & \ldots \\
-            \hline
-        \end{tabular}
+            \begin{tabular}{|c|c|c|}
+                \hline
+                \textbf{Op.} & \textbf{Contador} & \textbf{Coste real} \\
+                \hline
+                1            & (0,0,0)           & 1                   \\
+                2            & (1,0,0)           & 1                   \\
+                3            & (0,1,0)           & 2                   \\
+                4            & (1,1,0)           & 1                   \\
+                5            & (0,2,0)           & 2                   \\
+                6            & (1,2,0)           & 1                   \\
+                7            & (0,3,0)           & 2                   \\
+                8            & (1,3,0)           & 1                   \\
+                9            & (0,0,1)           & 3                   \\
+                10           & (1,0,1)           & 1                   \\
+                11           & (0,1,1)           & 2                   \\
+                12           & (1,1,1)           & 1                   \\
+                13           & (0,2,1)           & 2                   \\
+                14           & (1,2,1)           & 1                   \\
+                15           & (0,3,1)           & 2                   \\
+                16           & (1,3,1)           & 1                   \\
+                \ldots       & \ldots            & \ldots              \\
+                \hline
+            \end{tabular}
         }
         \caption{Ejemplo de incrementos en un contador con $b = (2,4,2)$}
     \end{table}
@@ -143,19 +142,19 @@
 
 \begin{frame}{Resolución: Método del potencial}
     Definimos una función potencial $\Phi(D_i)$ como el número de cifras distintas de $0$ en el contador tras la $i$-ésima operación. Sea $D_{i-1}$ el estado antes de la operación $i$ y $D_i$ el estado después.\\
-    
+
     Comprobemos las propiedades de la función potencial:
     \begin{itemize}
         \item $\Phi(D_0) = 0$, ya que el contador comienza en $0$.
         \item $\Phi(D_i) \geq \Phi(D_0) = 0$ para todo $i$, ya que el número de cifras distintas de $0$ no puede ser negativo.
-        \item En particular, $\Phi(D_n) \geq \Phi(D_0) = 0$. 
+        \item En particular, $\Phi(D_n) \geq \Phi(D_0) = 0$.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Cálculo del coste amortizado}
     Aplicando el método, el coste amortizado de la operación $i$ es:
     \[
-    \hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1})
+        \hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1})
     \]
     donde $c_i$ es el coste real de la operación $i$.
 \end{frame}
@@ -163,22 +162,40 @@
 \begin{frame}{Cálculo del coste amortizado}
     Cuando se incrementa el contador:
     \begin{itemize}
-        \item Se ponen a $0$ $k$ cifras (las menos significativas), y se incrementa la siguiente ($k$ puede ser $0$ si no hay acarreo).
+        \item Se ponen a $0$ $k$ cifras (las menos significativas), y se incrementa la
+              siguiente ($k$ puede ser $0$ si no hay acarreo).
         \item El coste real es $k+1$.
-        \item La función potencial disminuye en $k-1$ (pues se ponen a $0$ $k$ cifras y una pasa de $0$ a $1$).
+        \item La función potencial disminuye en $k-1$ (pues se ponen a $0$ $k$ cifras y una
+              pasa de $0$ a $1$).
     \end{itemize}
     Por tanto:
     \[
-    \Phi(D_i) - \Phi(D_{i-1}) = \Phi(D_{i-1}) - k + 1 - \Phi(D_{i-1}) = 1 - k
+        \Phi(D_i) - \Phi(D_{i-1}) = \Phi(D_{i-1}) - k + 1 - \Phi(D_{i-1}) = 1 - k
     \]
     \[
-    \hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1}) = (k+1) + (1-k) = 2
+        \hat{c}_i = c_i + \Phi(D_i) - \Phi(D_{i-1}) = (k+1) + (1-k) = 2
     \]
-    Así, el coste amortizado es $2$ para cualquier operación $\texttt{incr}$, es decir, $O(1)$.
+    Así, el coste amortizado es $2$ para cualquier operación $\texttt{incr}$, es
+    decir, $O(1)$.
 \end{frame}
 
+% Sección 4: Implementación
+\section{Implementación}
+\begin{frame}{Implementación en C++}
+    \texttt{void incr(vector<int>\& v, const vector<int>\& b) \{\\
+    int n = v.size();\\
+    v.resize(n); /* Nos aseguramos de que el tamaño del número coincide con el de las bases, esto se puede omitir si al crear el vector ya tienen el mismo tamaño*/\\
+    for (int i = 0; i < n; i++) \{\\
+    \qquad    v[i]++;\\
+    \qquad    if (v[i] < b[i]) \{ // Si no hay acarreo\\
+    \qquad \qquad        break; // Hemos llegado a una cifra que no requiere acarreo\\
+    \qquad    \}\\
+    \qquad    v[i] = 0; // Reiniciamos la cifra y continuamos con el acarreo\\
+    \qquad \}\\
+\}}
+\end{frame}
 
-% Sección 4: Conclusión
+% Sección 5: Conclusión
 \section{Conclusión}
 \begin{frame}{Conclusión}
     Hemos demostrado que, para un contador en bases arbitrarias, la operación $\texttt{incr}$ tiene coste amortizado $O(1)$ usando el método del potencial. Esto significa que, aunque algunas operaciones puedan requerir reiniciar varias cifras, el coste promedio por operación sigue siendo constante.
