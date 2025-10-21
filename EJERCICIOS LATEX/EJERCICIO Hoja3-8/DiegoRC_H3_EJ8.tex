@@ -1,0 +1,194 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+% Habilitar UTF-8 dentro de lstlisting (acentos, ñ, etc.)
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{verbatim}
+% Para dibujos con TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,trees}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    inputencoding=utf8,
+    % Mapeo de caracteres españoles para que no falle la compilación
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+}
+
+% Información del documento
+\title{Hoja 3: Ejercicio 8}
+\subtitle{Ejercicios de montículos}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1
+\section{Enunciado}
+\begin{frame}{Enunciado del ejercicio}
+    \begin{block}{Ejercicio 8}
+        Un montículo k-ario es como un montículo binario pero los nodos internos tienen k hijos en lugar de 2. ¿Cómo se representaría un montículo k-ario en un vector? ¿Cuál es la altura de un montículo k-ario de n elementos en términos de n y k?
+    \end{block}
+\end{frame}
+
+% Sección 2
+\section{Representación en un vector}
+\begin{frame}{Idea para la representación en un vector}
+    \begin{itemize}
+        \item En un montículo k-ario, cada nodo tiene k hijos.
+        \item La raíz del montículo se encuentra en la posición 0 del vector.
+        \item Las posiciones del vector se llenan siguiendo un recorrido por niveles del árbol.
+        \item La altura $h$ tendrá capacidad para $k^{h-1}$ nodos.
+    \end{itemize}
+\end{frame}
+\begin{frame}{Ejemplo de arbol $3$-ario}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[level distance=1.5cm,
+            level 1/.style={sibling distance=4cm},
+            level 2/.style={sibling distance=1cm},
+            level 3/.style={sibling distance=1cm},
+            level 4/.style={sibling distance=0.4cm}]
+            \node[circle,draw] {0}
+                child {node[circle,draw] {1}
+                    child {node[circle,draw] {4}
+                        child {node[circle,draw] {13}}
+                        child {node[circle,draw] {14}}
+                    }
+                    child {node[circle,draw] {5}
+                    }
+                    child {node[circle,draw] {6}}
+                }
+                child {node[circle,draw] {2}
+                    child {node[circle,draw] {7}}
+                    child {node[circle,draw] {8}}
+                    child {node[circle,draw] {9}}
+                }
+                child {node[circle,draw] {3}
+                    child {node[circle,draw] {10}}
+                    child {node[circle,draw] {11}}
+                    child {node[circle,draw] {12}}
+                };
+        \end{tikzpicture}
+        \caption{Ejemplo de un montículo 3-ario representado en un vector}
+    \end{figure}
+    \[
+    V = [0,\ 1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9,\ 10,\ 11,\ 12,\ 13,\ 14]
+    \]
+\end{frame}
+
+\begin{frame}{Representación en un vector}
+    \[
+    V = [0,\ 1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9,\ 10,\ 11,\ 12,\ 13,\ 14]
+    \]
+    Siendo el elemento $i$-ésimo del vector, el $m$ nodo de la altura $h$ (empezando por la altura $0$ y el nodo $0$ en cada altura):
+    \[
+        h = min\{d \mid \sum_{j=0}^{d} k^j > i \}
+    \]
+    \[
+        m = i - \sum_{j=0}^{h-1} k^j
+    \]
+    Por ejemplo, tomando el elemento en la posición $i=11$:
+    \[
+        h = min\{d \mid \sum_{j=0}^{d} 3^j > 11 \} = 2, \quad
+        m = 11 - (1 + 3) = 11 - 4 = 7
+    \]
+\end{frame}
+
+\begin{frame}{Representación en un vector: Cálculo de padres e hijos}
+    Si tenemos un nodo en la posición $i$ del vector, sus hijos y padre se calculan de la siguiente manera, usando induccion para buscar al primer hijo, luego se suman los siguientes hijos que son consecutivos:
+    \begin{itemize}
+        \item Sea nuestra hipótesis de inducción que la fórmula para encontrar al primer hijo es:
+        \[
+            \text{hijo}_1(i) = ki + 1
+        \]
+        \item Caso base $i=0$:
+        \[
+            \text{hijo}_1(0) = k \cdot 0 + 1 = 1
+        \]
+        Que es correcto, ya que el primer hijo de la raíz (posición 0) está en la posición 1.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Representación en un vector: Cálculo de padres e hijos (cont.)}
+    \begin{itemize}
+        \item Paso inductivo: Supongamos que la fórmula es correcta para un nodo en la posición $i$. Entonces, para el nodo en la posición $i+1$:
+        \[
+            \text{hijo}_1(i+1) = k(i+1) + 1 = ki + k + 1
+        \]
+        Esto es correcto ya que el nodo $i$ tendrá sus hijos en las posiciones desde $ki + 1$ hasta $ki + k$, por lo que el siguiente nodo $i+1$ tendrá sus hijos desde $ki + k + 1$ hasta $k(i+1) + k$, cumpliendo la fórmula.
+        \item El resto de hijos se encuentran en las posiciones:
+        \[
+            \text{hijo}_j(i) = ki + j, \quad \text{para } j = 1, 2, \ldots, k
+        \]
+    \end{itemize}
+    Así, hemos demostrado que la fórmula para encontrar a los hijos de un nodo en un montículo $k$-ario es correcta.
+\end{frame}
+
+% Sección 3
+\section{Altura del montículo k-ario}
+\begin{frame}{Cálculo de la altura del montículo k-ario}
+    Si tenemos un montículo $k$-ario con $n$ elementos, la altura $h$ del montículo se puede calcular observando que la cantidad total de nodos hasta la altura $h$ es como mucho:
+    \[
+        \sum_{j=0}^{h} k^j = \frac{k^{h+1} - 1}{k - 1}
+    \]
+    Para encontrar la altura en función de $n$ y $k$, necesitamos que esta suma sea al menos $n$, siendo $h$ el menor entero que cumple esta condición:
+    \[
+        \frac{k^{h+1} - 1}{k - 1} \geq n
+    \]
+    Despejando $h$, obtenemos:
+    \[
+        k^{h+1} \geq n(k - 1) + 1 \implies
+        h + 1 \geq \log_k(n(k - 1) + 1) \implies
+        h \geq \log_k(n(k - 1) + 1) - 1
+    \]
+    \[
+    h = \min \{z \in \mathbb{Z} \mid h \geq \log_k(n(k - 1) + 1) - 1 \}
+    \]
+\end{frame}
+
+% Sección 4
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    Podemos representar un montículo $k$-ario en un vector llenando los nodos por niveles, y la altura del montículo con $n$ elementos se puede calcular usando la fórmula derivada anteriormente. Además, hemos demostrado cómo calcular las posiciones de los hijos de un nodo dado su índice en el vector.\\
+    Todo esto resulta ser muy similar a los montículos binarios, pero adaptado a la estructura $k$-aria sustituyendo el $2$ por $k$ en las fórmulas correspondientes, con algunos ajustes necesarios.
+\end{frame}
+
+\end{document}

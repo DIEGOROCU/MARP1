@@ -1,4 +1,4 @@
-// Diego Rodriguez Cubero DG30 ED
+// Diego Rodriguez Cubero DG30 MARP
 
 #include <iostream>
 #include <fstream>

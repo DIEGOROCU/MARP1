@@ -12,8 +12,13 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{listings}
+% Habilitar UTF-8 dentro de lstlisting (acentos, ñ, etc.)
+\usepackage{listingsutf8}
 \usepackage{xcolor}
 \usepackage{verbatim}
+% Para dibujos con TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,trees}
 
 % Configuración de listings para código
 \lstset{
@@ -25,7 +30,12 @@
     breaklines=true,
     frame=single,
     numbers=left,
-    numberstyle=\tiny\color{gray}
+    numberstyle=\tiny\color{gray},
+    inputencoding=utf8,
+    % Mapeo de caracteres españoles para que no falle la compilación
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
 }
 
 % Información del documento

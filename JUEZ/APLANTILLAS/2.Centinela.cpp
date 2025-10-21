@@ -1,6 +1,5 @@
 /*@ <authors>
  *
- * Nombre, apellidos y usuario del juez (DGXX) de los autores de la solución.
  * Diego Rodriguez Cubeo DG30
  *
  *@ </authors> */

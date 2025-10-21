@@ -37,6 +37,8 @@ using namespace std;
  se resuelve el problema y cuál es el coste de la solución, en función
  del tamaño del problema.
 
+    La solución se basa en una función recursiva que, para cada nodo del árbol, comprueba si sus subárboles izquierdo y derecho son AVL y si el valor del nodo actual está en el rango adecuado. La función devuelve un conjunto de valores que indican si el árbol es AVL, si hay valores en él (para evitar comparar minimos o maximos inexistentes), el valor máximo y mínimo, y la altura del árbol. El coste de la solución es O(n), donde n es el número de nodos en el árbol, ya que cada nodo se visita una vez, realizando un número constante de operaciones en cada visita tambien de coste constante.
+
  @ </answer> */
 
 // ================================================================
@@ -44,6 +46,7 @@ using namespace std;
 // ================================================================
 //@ <answer>
 
+// Funcion para arboles de enteros
 tuple<bool, bool, int, int, int> esAVLint(BinTree<int> const& arbol) {
     // Caso base: árbol vacío
     // Devolvemos que claramente es AVL, que no hay valores, y altura 0
@@ -55,10 +58,12 @@ tuple<bool, bool, int, int, int> esAVLint(BinTree<int> const& arbol) {
     else if (arbol.left().empty() && arbol.right().empty()) {
         return {true, true, arbol.root(), arbol.root(), 1};
     }
+    // Caso general
     else {
+        // Llamada recursiva a los hijos
         auto [esAVL_izq, hay_izq, max_izq, min_izq, altura_izq] = esAVLint(arbol.left());
         auto [esAVL_der, hay_der, max_der, min_der, altura_der] = esAVLint(arbol.right());
-
+        // Calculo de los valores (minimo, maximo y AVL) a devolver en funcion de los hijos (y su existencia)
         int maxi = -1, mini = -1;
         bool maximos = true;
         if (hay_izq && hay_der) {
@@ -81,11 +86,14 @@ tuple<bool, bool, int, int, int> esAVLint(BinTree<int> const& arbol) {
             maxi = arbol.root();
             mini = arbol.root();
         }
+        // Cálculo de si el árbol es AVL, teniendo en cuenta los hijos y el nodo actual
         bool esAVL = esAVL_izq && esAVL_der && (abs(altura_izq - altura_der) <= 1) && maximos;
+        // Devolvemos los valores calculados
         return {esAVL, hay_izq || hay_der || !arbol.empty(), maxi, mini, 1 + max(altura_izq, altura_der)};
     }
 }
 
+// Funcion para arboles de strings
 tuple<bool, bool, string, string, int> esAVLstring(BinTree<string> const& arbol) {
     // Caso base: árbol vacío
     // Devolvemos que claramente es AVL, que no hay valores, y altura 0
@@ -97,10 +105,12 @@ tuple<bool, bool, string, string, int> esAVLstring(BinTree<string> const& arbol)
     else if (arbol.left().empty() && arbol.right().empty()) {
         return {true, true, arbol.root(), arbol.root(), 1};
     }
+    // Caso general
     else {
+        // Llamada recursiva a los hijos
         auto [esAVL_izq, hay_izq, max_izq, min_izq, altura_izq] = esAVLstring(arbol.left());
         auto [esAVL_der, hay_der, max_der, min_der, altura_der] = esAVLstring(arbol.right());
-
+        // Calculo de los valores (minimo, maximo y AVL) a devolver en funcion de los hijos (y su existencia)
         string maxi = "", mini = "";
         bool maximos = true;
         if (hay_izq && hay_der) {
@@ -123,7 +133,9 @@ tuple<bool, bool, string, string, int> esAVLstring(BinTree<string> const& arbol)
             maxi = arbol.root();
             mini = arbol.root();
         }
+        // Cálculo de si el árbol es AVL, teniendo en cuenta los hijos y el nodo actual
         bool esAVL = esAVL_izq && esAVL_der && (abs(altura_izq - altura_der) <= 1) && maximos;
+        // Devolvemos los valores calculados
         return {esAVL, hay_izq || hay_der || !arbol.empty(), maxi, mini, 1 + max(altura_izq, altura_der)};
     }
 }

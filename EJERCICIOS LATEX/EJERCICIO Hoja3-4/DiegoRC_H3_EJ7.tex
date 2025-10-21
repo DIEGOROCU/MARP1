@@ -1,0 +1,289 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+% Habilitar UTF-8 dentro de lstlisting (acentos, ñ, etc.)
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{verbatim}
+% Para dibujos con TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,trees}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    inputencoding=utf8,
+    % Mapeo de caracteres españoles para que no falle la compilación
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+}
+
+% Información del documento
+\title{Hoja 3: Ejercicio 4}
+\subtitle{Ejercicios de monticulos}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1
+\section{Enunciado del problema}
+\begin{frame}{Enunciado del problema}
+    \begin{block}{Ejercicio 4}
+        Diseñar un algoritmo que compruebe si un vector V [1..n] es un montículo de máximos y determinar su complejidad temporal.
+    \end{block}
+\end{frame}
+
+% Sección 2
+\section{Planteamiento}
+
+\begin{frame}{Definición de montículo de máximos}
+    \begin{exampleblock}{Definición}
+        Un montículo de máximos es un arbol binario semicompleto (todos los niveles llenos excepto posiblemente el último, que se llena de izquierda a derecha), que ademas cumple que su raiz es mayor que las de sus hijos, los cuales a su vez son monticulos de máximos.\\
+        Esto ultimo es equivalente a decir que cada nodo es mayor que sus descendientes.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Ejemplo de montículo de máximos}
+    \begin{center}
+        \begin{tikzpicture}[level distance=1.2cm,
+            level 1/.style={sibling distance=4.5cm},
+            level 2/.style={sibling distance=2.5cm},
+            level 3/.style={sibling distance=1.2cm},
+            every node/.style={circle,draw,minimum size=8mm,inner sep=0pt}
+        ]
+        \node {50}
+            child { node {40}
+                child { node {35}
+                    child { node {15} }
+                    child { node {14} }
+                }
+                child { node {20}
+                    child { node {13} }
+                    % right child missing to show incomplete last level
+                }
+            }
+            child { node {30}
+                child { node {25} }
+                child { node {10} }
+            };
+        \end{tikzpicture}
+
+        \vspace{4mm}
+
+        \small
+        \(V = [50,\;40,\;30,\;35,\;20,\;25,\;10,\;15,\;14,\;13]\)
+    \end{center}
+    Esta representación como vector se obtiene recorriendo el árbol por niveles, por lo que el primer elemento del nivel $h$ se encuentra en la posición $2^h - 1$ del vector, y esta seguido por el resto de elementos del nivel.
+\end{frame}
+
+\begin{frame}{Idea del ejercicio}
+    \[
+    V = [50,\;\textcolor{red}{40},\;30,\;\textcolor{blue}{35},\;\textcolor{green}{20},\;25,\;10,\;15,\;14,\;13]
+    \]
+    Primero es importante notar que si un nodo esta en la posición $\textcolor{red}{i}$ del vector, sus hijos estarán en las posiciones $\textcolor{blue}{2i + 1}$ y $\textcolor{green}{2i + 2}$\\
+    Por ejemplo el elemento $\textcolor{red}{40}$ que esta en la posición $1$ tiene como hijos a los elementos $\textcolor{blue}{35}$ y $\textcolor{green}{20}$ que están en las posiciones $3$ y $4$ respectivamente.\\
+    Asumimos que el arbol es semicompleto, y por tanto el vector no tiene ningún "hueco".\\
+    Usaremos esto para recorrer todos los nodos que tienen hijos y comprobar que sean mayores que ellos.\\
+\end{frame}
+
+\begin{frame}{Notación importante}
+    Por comodidad en el algoritmo, llamaremos $i=0$ a la raiz del árbol, y los hijos de cada nodo $i$ estarán en las posiciones $2i + 1$ y $2i + 2$.\\
+    Esto se deduce de la notación empleada en clase donde los hijos del nodo $k$ están en las posiciones $2k$ y $2k + 1$, pero aquí el vector empieza en la posición $0$ en lugar de la $1$.\\
+    \begin{center}
+        \tikzpicture[
+            every node/.style={
+                circle, draw,
+                minimum size=8mm,
+                inner sep=0pt,
+                text width=10mm,
+                align=center,
+                font=\small
+            },
+            level distance=12mm, sibling distance=18mm
+        ]
+            \node {$i$}
+                child { node {$?$} }
+                child { node {$?$} };
+        \endtikzpicture
+        $\underbrace{\implies}_{\text{++ los indices}}$
+        \tikzpicture[
+            every node/.style={
+                circle, draw,
+                minimum size=8mm,
+                inner sep=0pt,
+                text width=10mm,
+                align=center,
+                font=\small
+            },
+            level distance=12mm, sibling distance=18mm
+        ]
+            \node {$k = i + 1$}
+                child { node {$2k = 2i + 2$} }
+                child { node {$2k+1 = 2i + 3$} };
+        \endtikzpicture
+        $\underbrace{\implies}_{\text{- - los indices}}$
+        \tikzpicture[
+            every node/.style={
+                circle, draw,
+                minimum size=8mm,
+                inner sep=0pt,
+                text width=10mm,
+                align=center,
+                font=\small
+            },
+            level distance=12mm, sibling distance=18mm
+        ]
+            \node {$i$}
+                child { node {$2i + 1$} }
+                child { node {$2i + 2$} };
+        \endtikzpicture   
+    \end{center}
+\end{frame}
+
+% Sección 3
+\section{Desarrollo}
+\begin{frame}[fragile]{Algoritmo}
+    \begin{lstlisting}[language=C++, caption={Función para comprobar si un vector es un montículo de máximos}]
+        bool esMonticuloMaximos(int V[], int n) {
+            for (int i = 0; i <= (n - 2) / 2; i++) { // Recorremos nodos con hijos
+                int izq = 2 * i + 1; // Hijo izquierdo
+                int der = 2 * i + 2; // Hijo derecho
+                if (izq < n && V[i] < V[izq]) {
+                    return false; // Violación de la propiedad del montículo
+                }
+                if (der < n && V[i] < V[der]) {
+                    return false; // Violación de la propiedad del montículo
+                }
+            }
+            return true; // Es un montículo de máximos
+        }
+    \end{lstlisting}
+\end{frame}
+
+% Sección 4
+\section{Ejemplo}
+\begin{frame}{Ejemplo de ejecución}
+    \begin{itemize}
+        \item Sea \(V = [50, 40, 30, 35, 20, 25, 10, 15, 14, 13]\) y \(n = 10\).
+        \item Iteramos desde \(i = 0\) hasta \((n - 2) / 2 = 4\) (incluido).
+        \item Comprobamos cada nodo con sus hijos.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Paso $i = 0$}
+    \[
+    V = [\textcolor{red}{50}, \textcolor{blue}{40}, \textcolor{green}{30}, 35, 20, 25, 10, 15, 14, 13]
+    \]
+    \begin{itemize}
+        \item Como $i = 0 \implies$ hijos en \(2*0 + 1 = 1\) y \(2*0 + 2 = 2\)
+        \item \(V[0] = 50\)
+        \item Hijos: \(V[1] = 40\), \(V[2] = 30\)
+        \item \(50 > 40\) y \(50 > 30\) (cumple)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Paso $i = 1$}
+    \[
+    V = [50, \textcolor{red}{40}, 30, \textcolor{blue}{35}, \textcolor{green}{20}, 25, 10, 15, 14, 13]
+    \]
+    \begin{itemize}
+        \item Como $i = 1 \implies$ hijos en \(2*1 + 1 = 3\) y \(2*1 + 2 = 4\)
+        \item \(V[1] = 40\)
+        \item Hijos: \(V[3] = 35\), \(V[4] = 20\)
+        \item \(40 > 35\) y \(40 > 20\) (cumple)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Paso $i = 2$}
+    \[
+    V = [50, 40, \textcolor{red}{30}, 35, 20, \textcolor{blue}{25}, \textcolor{green}{10}, 15, 14, 13]
+    \]
+    \begin{itemize}
+        \item Como $i = 2 \implies$ hijos en \(2*2 + 1 = 5\) y \(2*2 + 2 = 6\)
+        \item \(V[2] = 30\)
+        \item Hijos: \(V[5] = 25\), \(V[6] = 10\)
+        \item \(30 > 25\) y \(30 > 10\) (cumple)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Paso $i = 3$}
+    \[
+    V = [50, 40, 30, \textcolor{red}{35}, 20, 25, 10, \textcolor{blue}{15}, \textcolor{green}{14}, 13]
+    \]
+    \begin{itemize}
+        \item Como $i = 3 \implies$ hijos en \(2*3 + 1 = 7\) y \(2*3 + 2 = 8\)
+        \item \(V[3] = 35\)
+        \item Hijos: \(V[7] = 15\), \(V[8] = 14\)
+        \item \(35 > 15\) y \(35 > 14\) (cumple)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Paso $i = 4$}
+    \[
+    V = [50, 40, 30, 35, \textcolor{red}{20}, 25, 10, 15, 14, \textcolor{blue}{13}]
+    \]
+    \begin{itemize}
+        \item Como $i = 4 \implies$ hijos en \(2*4 + 1 = 9\) y \(2*4 + 2 = 10\)
+        \item \(V[4] = 20\)
+        \item Hijos: \(V[9] = 13\), \(V[10]\) no existe ($10 \geq n = 10$)
+        \item \(20 > 13\) (cumple)
+    \end{itemize}
+\end{frame}
+
+% Sección 5
+\section{Complejidad temporal}
+\begin{frame}{Complejidad temporal}
+    \begin{itemize}
+        \item El bucle for itera desde \(i = 0\) hasta \((n - 2) / 2\), lo que implica $\frac{n}{2} - 1$ iteraciones, es decir, \(O(n)\) iteraciones.
+        \item En cada iteración, se realizan un número constante de operaciones (comparaciones y asignaciones), todas ellas de tiempo \(O(1)\), al tener vectores que nos permiten acceso directo a sus elementos.
+        \item Por lo tanto, el tiempo total del algoritmo es la suma del tiempo de todas las iteraciones:
+        \[T(n) = \sum_{i=0}^{(n-2)/2} O(1) = O(n)\]
+        \item Por lo tanto, la complejidad temporal total del algoritmo es \(O(n)\).
+    \end{itemize}
+\end{frame}
+
+% Sección 6
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    \begin{itemize}
+        \item Hemos diseñado un algoritmo eficiente para comprobar si un vector representa un montículo de máximos.
+        \item El algoritmo recorre todos los nodos con hijos y verifica la propiedad del montículo en tiempo lineal \(O(n)\).
+    \end{itemize}
+\end{frame}
+
+\end{document}
