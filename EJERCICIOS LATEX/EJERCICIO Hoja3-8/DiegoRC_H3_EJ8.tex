@@ -43,7 +43,7 @@
 \subtitle{Ejercicios de montículos}
 \author{Diego Rodríguez Cubero}
 \institute{UCM}
-\date{\today}
+\date{22 de Octubre de 2025}
 
 % Logo (opcional)
 % \logo{\includegraphics[height=1cm]{images/logo.png}}
@@ -160,6 +160,56 @@
         \]
     \end{itemize}
     Así, hemos demostrado que la fórmula para encontrar a los hijos de un nodo en un montículo $k$-ario es correcta.
+\end{frame}
+
+\begin{frame}{Representación en un vector: Cálculo de padres e hijos (ejemplo)}
+    Por ejemplo, para el nodo en la posición $i=2$ en un montículo $3$-ario:
+    \[
+        \text{hijo}_1(2) = 3 \cdot 2 + 1 = 7
+    \]
+    \[
+        \text{hijo}_2(2) = 3 \cdot 2 + 2 = 8
+    \]
+    \[
+        \text{hijo}_3(2) = 3 \cdot 2 + 3 = 9
+    \]
+    Por lo tanto, los hijos del nodo en la posición $2$ están en las posiciones $7$, $8$ y $9$ del vector, que corresponde a los nodos con valores $7$, $8$ y $9$ en nuestro ejemplo anterior.
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[level distance=1.5cm,
+            level 1/.style={sibling distance=4cm},
+            level 2/.style={sibling distance=1cm},
+            level 3/.style={sibling distance=1cm},
+            level 4/.style={sibling distance=0.4cm}]
+            \node[circle,draw] {0}
+                child {node[circle,draw] {1}
+                    child {node[circle,draw] {4}
+                        child {node[circle,draw] {13}}
+                        child {node[circle,draw] {14}}
+                    }
+                    child {node[circle,draw] {5}
+                    }
+                    child {node[circle,draw] {6}}
+                }
+                child {node[circle,draw] {2}
+                    child {node[circle,draw] {7}}
+                    child {node[circle,draw] {8}}
+                    child {node[circle,draw] {9}}
+                }
+                child {node[circle,draw] {3}
+                    child {node[circle,draw] {10}}
+                    child {node[circle,draw] {11}}
+                    child {node[circle,draw] {12}}
+                };
+        \end{tikzpicture}
+        \caption{Ejemplo de un montículo 3-ario representado en un vector}
+    \end{figure}
+    \[
+    V = [0,\ 1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9,\ 10,\ 11,\ 12,\ 13,\ 14]
+    \]
 \end{frame}
 
 % Sección 3

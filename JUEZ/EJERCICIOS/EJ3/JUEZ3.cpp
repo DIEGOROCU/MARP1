@@ -1,7 +1,5 @@
-
 /*@ <authors>
  *
- * Nombre, apellidos y usuario del juez (DGXX) de los autores de la solución.
  * Diego Rodriguez Cubeo DG30
  *
  *@ </authors> */
@@ -29,54 +27,52 @@
 
 #include <tuple>
 
+#include "PriorityQueue.h"
+
 using namespace std;
 
-/*@ <answer>
-
- Escribe aquí un comentario general sobre la solución, explicando cómo
- se resuelve el problema y cuál es el coste de la solución, en función
- del tamaño del problema.
-
- @ </answer> */
+/*
+   La idea detras de la solución es utilizar una cola de prioridad para ir combinando los números más pequeños primero.
+   El coste es O(n log n) siendo n el número de elementos iniciales, ya que en cada combinación se realizan dos extracciones y una inserción en la cola de prioridad,
+   cada una de ellas con coste logarítmico, y se realizan n-1 combinaciones.
+*/
 
 // ================================================================
 // Escribe el código completo de tu solución aquí debajo
 // ================================================================
 //@ <answer>
 
-bool esMonticuloMaximos(vector<int> V, int n) {
-            for (int i = 0; i <= (n - 2) / 2; i++) { // Recorremos nodos con hijos
-                int izq = 2 * i + 1; // Hijo izquierdo
-                int der = 2 * i + 2; // Hijo derecho
-                if (izq < n && V[i] < V[izq]) {
-                    return false; // Violación de la propiedad del montículo
-                }
-                if (der < n && V[i] < V[der]) {
-                    return false; // Violación de la propiedad del montículo
-                }
-            }
-            return true; // Es un montículo de máximos
-}
-
-void resuelveCaso()
+bool resuelveCaso()
 {
 
    // leer los datos de la entrada
+
    int n;
-   std::cin >> n;
-   vector<int> V(n);
-   for (int i = 0; i < n; ++i) {
-      std::cin >> V[i];
-   }
+   cin >> n;
 
-   // resolver el caso posiblemente llamando a otras funciones
-   if (esMonticuloMaximos(V, n)) {
-       std::cout << "Es un montículo de máximos\n";
-   } else {
-       std::cout << "No es un montículo de máximos\n";
-   }
+   if (n == 0)
+      return false;
 
-   // escribir la solución
+   else
+   {
+      
+      // Lectura de los números
+      PriorityQueue<int> numeros;
+      for (int i = 0; i < n; ++i)
+      {
+         int num;
+         cin >> num;
+         numeros.push(num);
+      }
+
+      int suma = 0;
+      // Resolución del caso
+      suma = numeros.resuelveCaso();
+
+      // escribir los resultados
+      cout << suma << endl;
+      return true;
+   }
 }
 
 //@ </answer>
@@ -90,10 +86,8 @@ int main()
    auto cinbuf = std::cin.rdbuf(in.rdbuf());
 #endif
 
-   int numCasos;
-   std::cin >> numCasos;
-   for (int i = 0; i < numCasos; ++i)
-      resuelveCaso();
+   while (resuelveCaso())
+      ;
 
    // para dejar todo como estaba al principio
 #ifndef DOMJUDGE
