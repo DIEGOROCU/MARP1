@@ -1,0 +1,114 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+% Habilitar UTF-8 dentro de lstlisting (acentos, ñ, etc.)
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{verbatim}
+% Para dibujos con TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,trees}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    inputencoding=utf8,
+    % Mapeo de caracteres españoles para que no falle la compilación
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+}
+
+% Información del documento
+\title{Hoja 5: Ejercicio 22}
+\subtitle{TEMA}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1
+\section{Enunciado del problema}
+\begin{frame}{Enunciado del problema}
+    \begin{block}{Ejercicio 22}
+        En la playa de Malibú tenemos $N$ puestos de vigilancia y $N$ socorristas. Los puestos de vigilancia se encuentran situados a lo largo de la orilla a distancias medidas desde uno de sus extremos, que están guardadas en un vector $D$ de distancias. Durante la mañana los socorristas han estado paseando por la orilla para vigilar a los bañistas pero al final de la mañana han de acudir cada uno a uno de los puestos de vigilancia para hacer un informe (en cada puesto solo cabe un socorrista). Las posiciones de los socorristas en la orilla están medidas desde el mismo extremo de la playa que los puestos y guardadas en un vector $S$. Cada socorrista tarda tantos minutos como distancia hay entre él y el puesto al que acude. Por ejemplo, si un puesto está en la posición 0 y un socorrista en la 2, tardará 2 minutos en llegar a ese puesto. El coordinador ha de esperar a que el último termine su informe para poder irse a casa y está deseando llegar para ver a su familia. Para ello, idea una estrategia para indicar a cada socorrista a qué puesto acudir a hacer su informe de forma que el coordinador pueda irse a casa lo más pronto posible, y demuestra que dicha estrategia es óptima.
+    \end{block}
+\end{frame}
+
+% Sección 2
+\section{Idea de la solución}
+\begin{frame}{Idea de la solución}
+    \begin{itemize}
+        \item Ordenar ambos vectores $D$ y $S$ de menor a mayor.
+        \item Asignar el socorrista más cercano al puesto más cercano, el segundo socorrista más cercano al segundo puesto más cercano, y así sucesivamente, es decir, emparejar $S[i]$ con $D[i]$.
+    \end{itemize}
+\end{frame}
+
+% Sección 3
+\section{Justificación de la optimalidad}
+\begin{frame}{Justificación de la optimalidad}
+    \begin{itemize}
+        \item Sea nuestra solución voraz $V$, y sea $O$ una solución óptima diferente a $V$, donde $V[i] = j$ indica que el socorrista $i$ va al puesto $j$, y analogamente para $O$.
+        \item Sabemos que $V[i] = i$ para todo $i$ (ambos vectores ordenados), por lo que sea $k$ el primer índice donde $O[k] \neq k$.
+        \item Entonces, existe un $m$ tal que $O[m] = k$.
+        \item Si intercambiamos las asignaciones de $O$ en las posiciones $k$ y $m$, obtenemos una nueva solución $O'$ donde $O'[k] = O[m] = k$ y $O'[m] = O[k]$.
+        \item Podemos demostrar que el tiempo máximo de espera en $O'$ no es mayor que en $O$, por lo que $O'$ es también una solución óptima.
+        \item Repetimos este proceso hasta que $O$ coincida con $V$, demostrando que $V$ es óptima.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Comprobación del intercambio}
+    Comprobemos que el tiempo máximo de espera en $O'$ no es mayor que en $O$:
+    \begin{itemize}
+        \item En $O$, el tiempo de espera máximo es $\max(T_O) = \max(\ldots, |S[k] - D[O[k]]|, \ldots, |S[m] - D[O[m]]|, \ldots)$.
+        \item En $O'$, el tiempo de espera máximo es $\max(T_{O'}) = \max(\ldots, |S[k] - D[k]|, \ldots, |S[m] - D[O[k]]|, \ldots)$.
+        \item Dado que $S$ y $D$ están ordenados, se cumple que $\max (|S[k] - D[k]|, |S[m] - D[O[k]]|) \leq \max (|S[k] - D[O[k]]|, |S[m] - D[m]|)$, ya que la suma de las distancias cruzadas es mayor o igual que la suma de las distancias directas, debido a que $S[k] \leq S[m]$ y $D[k] \leq D[O[k]]$.
+        \item Por lo tanto, $\max(T_{O'}) \leq \max(T_O)$.
+        \item Esto demuestra que el intercambio no aumenta el tiempo máximo de espera, y por lo tanto $O'$ es también una solución óptima.
+    \end{itemize}
+\end{frame}
+
+% Sección 4
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    \begin{itemize}
+        \item Hemos propuesto un algoritmo voraz para asignar socorristas a puestos de vigilancia que minimiza el tiempo máximo de espera del coordinador.
+        \item Hemos demostrado la optimalidad del algoritmo mediante un argumento de intercambio.
+        \item El coste asintótico del algoritmo es $O(N \log N)$ debido a la ordenación de los vectores $D$ y $S$.
+    \end{itemize}
+\end{frame}
+
+\end{document}

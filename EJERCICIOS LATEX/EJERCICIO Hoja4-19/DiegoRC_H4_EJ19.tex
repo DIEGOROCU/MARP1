@@ -1,0 +1,128 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+% Habilitar UTF-8 dentro de lstlisting (acentos, ñ, etc.)
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{verbatim}
+% Para dibujos con TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,trees}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    inputencoding=utf8,
+    % Mapeo de caracteres españoles para que no falle la compilación
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+}
+
+% Información del documento
+\title{Hoja 4: Ejercicio 19}
+\subtitle{TEMA}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1
+\section{Enunciado del problema}
+\begin{frame}{Enunciado del problema}
+    \begin{block}{Ejercicio 19}
+        Nos dan un grafo $G = ⟨V, A⟩$ no dirigido, valorado y conexo y un ARM (árbol de recubrimiento de coste mínimo) para él. También nos dan una arista nueva $(u, v) \notin A$, con un valor asociado $c$. Se pide un algoritmo de coste en $O(|V|)$ que modifique el ARM de manera que el resultado sea un ARM para $G' = ⟨V, A \cup \{(u, v)\}⟩$. Razona la corrección y el coste.
+    \end{block}
+\end{frame}
+
+% Sección 2
+\section{Idea del algoritmo}
+\begin{frame}{Idea del algoritmo}
+    \begin{itemize}
+        \item Al añadir la arista $(u, v) = e$ al ARM dado, se forma un ciclo.
+        \item Para volver a tener un ARM, debemos eliminar una arista del ciclo formado, la de mayor coste.
+        \item Tendremos que recorrer el ciclo para encontrar dicha arista. Esto puede hacerse encontrando el camino entre $u$ y $v$ en el ARM, y comparando su arista más cara con $e$.
+        \item Si $e$ es menor que la arista más cara del ciclo, eliminamos esa arista del ARM y añadimos $e$ en su lugar.
+        \item Si no, el ARM permanece igual.
+    \end{itemize}
+\end{frame}
+
+% Sección 3
+\section{Algoritmo}
+\begin{frame}[fragile]{Algoritmo}
+    \begin{lstlisting}[language = C++, caption={Actualización del ARM al añadir una arista}]
+    function actualizarARM(ARM, u, v, c):
+    // e = arista(u, v) con coste c
+    camino = encontrarCamino(ARM, u, v) // DFS o BFS , O(V)
+    aristaMax = arista de mayor coste en camino // O(V)
+    if (c < coste(aristaMax)):
+        eliminar aristaMax de ARM // O(1)
+        añadir e a ARM // O(1)
+    return ARM
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Análisis de coste}
+    \begin{itemize}
+        \item Encontrar el camino entre $u$ y $v$ en el ARM puede hacerse con DFS o BFS, ambos con coste $O(V + E)$, y en un árbol $E = V - 1$, por lo que es $O(V)$.
+        \item Encontrar la arista de mayor coste en el camino también cuesta $O(V)$, al tener que recorrer el camino de $V$ nodos en el peor caso.
+        \item Las operaciones de eliminar y añadir aristas al ARM son $O(1)$.
+        \item Por lo tanto, el coste total del algoritmo es $O(V)$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Corrección del algoritmo}
+    \begin{itemize}
+        \item Al añadir la arista $(u, v)$ al ARM, se forma un ciclo.
+        \item Aplicando la propiedad del corte, podemos cortar al ciclo formado en $G'=⟨V, A \cup \{(u, v)\}⟩ = G + e$, cortanto en $e$ y la arista de mayor coste del ciclo $e_o$, garantizamos que el árbol resultante sigue siendo un ARM.
+        \item La propiedad del corte nos dice que exactamente una de las aristas $e, e_o$ debe pertenecer al ARM óptimo.
+        \item Si $c < coste(e_o)$, entonces $e$ debe estar en el ARM óptimo, y eliminamos $e_o$.
+        \item Si $c \geq coste(e_o)$, entonces $e_o$ debe estar en el ARM óptimo, y no hacemos ningún cambio.
+        \item Por lo tanto, el algoritmo es correcto.
+    \end{itemize}
+\end{frame}
+
+% Sección 4
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    \begin{itemize}
+        \item Hemos diseñado un algoritmo eficiente para actualizar un ARM tras la adición de una nueva arista.
+        \item El algoritmo tiene un coste de $O(V)$, cumpliendo con los requisitos del problema.
+        \item La corrección del algoritmo se debe a la aplicación de la propiedad del corte en grafos.
+    \end{itemize}
+\end{frame}
+
+\end{document}

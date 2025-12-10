@@ -1,0 +1,149 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+% Habilitar UTF-8 dentro de lstlisting (acentos, ñ, etc.)
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{verbatim}
+% Para dibujos con TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,trees}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    inputencoding=utf8,
+    % Mapeo de caracteres españoles para que no falle la compilación
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+}
+
+% Información del documento
+\title{Hoja 5: Ejercicio 23}
+\subtitle{TEMA}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1
+\section{Enunciado del problema}
+\begin{frame}{Enunciado del problema}
+    \begin{block}{Ejercicio 23}
+    El dueño de una pinacoteca quiere comprar nuevos cuadros para incorporarlos a su colección, pero no desea comprar más de un cuadro por mes. El precio de los n cuadros que le interesan en el momento actual es conocido $(p_1, \ldots , p_n)$ pero a medida que pasan los meses los precios se irán incrementando de manera exponencial, porque se trata de un mercado con una gran competencia. Así que, si el precio inicial es $p_i$ , después de $t$ meses el precio será $p_i^t$. Empezará comprando los cuadros al final del primer mes $(t = 1)$ y sucesivamente al final del segundo mes, del tercero, etc. Por ejemplo, si $n = 3$, los cuadros cuestan $p_1 = 3, p_2 = 5$ y $p_3 = 2$ euros, y decide comprar el cuadro i al final del mes i, pagará en total $31 + 52 + 23 = 36$ euros. Explicar e implementar un algoritmo voraz para minimizar el coste total de los n cuadros que quiere comprar. Justificar la corrección de dicho algoritmo. Analizar el coste asintótico del algoritmo implementado.
+    \end{block}
+\end{frame}
+
+% Sección 2
+\section{Algoritmo voraz propuesto}
+\begin{frame}{Algoritmo voraz propuesto}
+    \begin{enumerate}
+        \item Ordenar los precios de los cuadros en orden descendente.
+        \item Comprar los cuadros en ese orden, asignando el mes correspondiente.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Implementación en C++}
+    \begin{lstlisting}[language=C++,title=Algoritmo]
+    int coste_Minimo(vector<int> &precios) {
+    sort(precios.begin(), precios.end(), greater<int>()); // Ordenamos de mayor a menor
+    int n = precios.size();
+    int coste_total = 0;
+    for (int i = 0; i < n; ++i) {
+        coste_total += pow(precios[i], i + 1); // Compramos el cuadro i en el mes i+1
+    }
+    return coste_total; // Devolvemos el coste total
+    }
+    \end{lstlisting}
+\end{frame}
+
+% Sección 3
+\section{Justificación de la corrección}
+\begin{frame}{Justificación de la corrección}
+    Comprobemos que el algoritmo es correcto mediante un argumento de intercambio, llamemos $X_v$ a la solución voraz y $X_o$ a una solución óptima diferente, siendo ambos casos un vector con el orden de compra de los cuadros, y del mismo tamaño $n$ (número de cuadros).
+    \begin{enumerate}
+        \item Si $X_v = X_o$, entonces la solución voraz es óptima.
+        \item Si $X_v \neq X_o$, entonces tomamos $k = \min \{ i | X_v[i] \neq X_o[i] \}$, es decir, el primer índice donde difieren ambas soluciones (existe al menos uno ya que son diferentes, y todos los cuadros se deben comprar).
+        \item Intercambiamos en $X_o$ el cuadro que se compra en la posición $k$ por el cuadro que se compra en la posición $j > k$ donde se encuentra el cuadro que en $X_v$ se compra en la posición $k$.
+        \item Llamemos $X_o'$ a la nueva solución tras el intercambio. Entonces, el coste de $X_o'$ es menor o igual que el coste de $X_o$, ya que hemos adelantado la compra de un cuadro más caro y retrasado la compra de un cuadro más barato.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Justificación de la corrección (cont.)}
+    \begin{enumerate}
+        \setcounter{enumi}{4}
+        \item Repetimos el proceso hasta que $X_o$ sea igual a $X_v$. En cada paso, el coste de la solución no aumenta, por lo que el coste de $X_v$ es menor o igual que el coste de $X_o$.
+        \item Por lo tanto, la solución voraz $X_v$ es óptima.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Justificación de la corrección (cont.)}
+    El paso $4$ es válido ya que el coste de un cuadro $i$ comprado en el mes $t$ es $p_i^t$, y si adelantamos la compra de un cuadro más caro y retrasamos la compra de un cuadro más barato (el cuadro que se compra en la posición $k$ de $X_o$ es mas caro que el que se compra en la posición $j > k$, por la ordenación que usa $X_v$ y ya que el cuadro $X_o[k]$ todavia no es comprao en $X_v$), el coste total disminuye o se mantiene igual, usando formulas:
+    \[
+    p_{X_o[k]}^k + p_{X_o[j]}^j \leq p_{X_o[k]}^j + p_{X_o[j]}^k \iff
+    p_{X_o[k]}^k - p_{X_o[j]}^k \leq p_{X_o[k]}^j - p_{X_o[j]}^j \iff
+    \]
+    \[
+    (p_{X_o[k]} - p_{X_o[j]}) \sum_{i=0}^{k-1} p_{X_o[k]}^i p_{X_o[j]}^{k-1-i} \leq (p_{X_o[k]} - p_{X_o[j]}) \sum_{i=0}^{j-1} p_{X_o[k]}^i p_{X_o[j]}^{j-1-i}
+    \]
+    Que se cumple ya que $p_{X_o[k]} > p_{X_o[j]}$ y la suma de la derecha es mayor que la de la izquierda, al poder asociar a cada termino de la izquierda un término mayor en la derecha:
+    \[
+    p_{X_o[k]}^{i} p_{X_o[j]}^{k-1-i} \leq p_{X_o[k]}^{i} p_{X_o[j]}^{j-1-i} \quad \forall i \in [0, k-1]
+    \]
+\end{frame}
+
+% Sección 4
+\section{Análisis del coste asintótico}
+\begin{frame}{Análisis del coste asintótico}
+    \begin{itemize}
+        \item El coste de ordenar los precios es $O(n \log n)$, donde $n$ es el número de cuadros.
+        \item El coste de calcular el coste total es $O(n)$, ya que recorremos la lista de precios una vez.
+        \item Por lo tanto, el coste total del algoritmo es:
+    \end{itemize}
+    \[
+    O(n \log n) + O(n) = O(n \log n)
+    \]
+    Así, el algoritmo voraz propuesto tiene un coste asintótico de $O(n \log n)$.
+\end{frame}
+
+% Sección 5
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    Hemos propuesto un algoritmo voraz para minimizar el coste total de la compra de cuadros en una pinacoteca, basado en ordenar los precios de los cuadros en orden descendente y comprarlos en ese orden. Hemos justificado la corrección del algoritmo mediante un argumento de intercambio y hemos analizado su coste asintótico, concluyendo que es $O(n \log n)$.
+\end{frame}
+
+\end{document}

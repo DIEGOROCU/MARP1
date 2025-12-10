@@ -1,0 +1,13 @@
+# Esta carpeta contendrá los archivos generados durante la compilación
+# 
+# Archivos que se generarán aquí:
+# - *.pdf (archivo final de la presentación)
+# - *.aux (archivo auxiliar de LaTeX)
+# - *.log (registro de compilación)
+# - *.nav (navegación de Beamer)
+# - *.out (marcadores de PDF)
+# - *.snm (fragmentos de Beamer)
+# - *.toc (tabla de contenidos)
+# - *.vrb (código verbatim de Beamer)
+# 
+# Estos archivos se pueden limpiar con "make clean"

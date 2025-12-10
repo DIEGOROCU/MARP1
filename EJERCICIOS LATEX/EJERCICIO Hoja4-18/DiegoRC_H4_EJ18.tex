@@ -1,0 +1,127 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Tema y configuración
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paquetes necesarios
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+% Habilitar UTF-8 dentro de lstlisting (acentos, ñ, etc.)
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{verbatim}
+% Para dibujos con TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,trees}
+
+% Configuración de listings para código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    inputencoding=utf8,
+    % Mapeo de caracteres españoles para que no falle la compilación
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+}
+
+% Información del documento
+\title{Hoja 4: Ejercicio 18}
+\subtitle{TEMA}
+\author{Diego Rodríguez Cubero}
+\institute{UCM}
+\date{\today}
+
+% Logo (opcional)
+% \logo{\includegraphics[height=1cm]{images/logo.png}}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Tabla de contenidos
+\begin{frame}{Contenidos}
+    \tableofcontents
+\end{frame}
+
+% Sección 1
+\section{Enunciado}
+\begin{frame}{Enunciado del ejercicio}
+    \begin{block}{Ejercicio 8}
+        Dado un grafo no dirigido, conexo, valorado y en el que no hay dos aristas que tengan el    mismo coste, razonar con el mayor rigor posible que los algoritmos de Kruskal y Prim
+        necesariamente calcularán el mismo árbol de recubrimiento de coste mínimo.
+    \end{block}
+\end{frame}
+
+% Sección 2
+\section{Idea de la solución}
+\begin{frame}{Idea de la solución}
+    \begin{itemize}
+        \item Ambos algoritmos calculan un ARM, por lo que basta ver que hay un único ARM.
+        \item Tendremos que comprobar que toda arista del ARM es la mínima que conecta dos componentes conexas.
+    \end{itemize}
+\end{frame}
+
+% Sección 3
+\section{Definiciones}
+\begin{frame}{Definiciones}
+    \begin{itemize}
+        \item \textbf{Árbol de recubrimiento mínimo (ARM)}: Árbol que conecta todos los vértices del grafo con el coste total mínimo.
+        \item En nuestro caso, un grafo $G$ no dirigido, conexo, valorado y sin aristas de igual coste.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Algoritmos de Kruskal y Prim}
+    \begin{itemize}
+        \item \textbf{Kruskal}: Añade aristas de menor coste que no formen ciclos.
+        \item \textbf{Prim}: Añade aristas de menor coste que conecten un vértice del árbol con otro fuera de él.
+    \end{itemize}
+\end{frame}
+
+% Sección 4
+\section{Demostración}
+\begin{frame}{Demostración por absurdo}
+    \begin{enumerate}
+        \item Supongamos que hay dos ARM distintos $A$ y $B$.
+        \item Sea $e$ la arista de menor coste que pertenece a $A$ pero no a $B$ (tal arista existe ya que $A \nsubseteq B$, si no $B$ no podría ser un ARM al poder quitarle aristas hasta quedarse con $A$).
+        \item Al eliminar $e$ de $A$, se forman dos componentes conexas $S$ y $\overline{S}$ (si no fuera así, $A$ tendría un ciclo).
+        \item Como $B$ es conexo, existe una arista $f$ en $B$ que conecta $S$ y $\overline{S}$, y dicha arista no puede estar en $A$, ya que si hacemos el corte $A - \{e, f\}$, segun proposiciones vistas en clase, solo la menor arista que conecta $S$ y $\overline{S}$ puede pertenecer a un ARM, y esa sera solo una de las dos.
+        \item Si ahora tomamos $A' = A - \{e\} + \{f\}$, obtenemos otro árbol de recubrimiento (ya que $f$ conecta $S$ y $\overline{S}$).
+        
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Demostración por absurdo (cont.)}
+    \begin{enumerate}
+        \item Si el coste de $f$ fuera menor que el de $e$, entonces el coste de $A'$ sería menor que el de $A$, contradiciendo que $A$ es un ARM.
+        \item Si el coste de $f$ fuera mayor que el de $e$, entonces el coste de $B' = B - \{f\} + \{e\}$ ($e \notin B$) sería menor que el de $B$, contradiciendo que $B$ es un ARM.
+        \item Por tanto, el coste de $f$ debe ser igual al de $e$, lo cual es imposible ya que no hay dos aristas con el mismo coste, a no ser que $e = f$, lo cual es absurdo ya que $e \notin B$.
+        \item Por tanto, nuestra suposición inicial es falsa y sólo existe un único ARM.
+    \end{enumerate}
+\end{frame}
+
+% Sección 5
+\section{Conclusión}
+\begin{frame}{Conclusión}
+    \begin{itemize}
+        \item Dado que ambos algoritmos calculan un ARM y que sólo existe un único ARM, ambos algoritmos calcularán el mismo árbol de recubrimiento de coste mínimo, al ser la única opción posible.
+    \end{itemize}
+\end{frame}
+
+\end{document}

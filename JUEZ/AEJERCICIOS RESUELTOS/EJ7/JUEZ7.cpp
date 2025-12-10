@@ -33,9 +33,10 @@ using namespace std;
 
 /*@ <answer>
 
- Escribe aquí un comentario general sobre la solución, explicando cómo
- se resuelve el problema y cuál es el coste de la solución, en función
- del tamaño del problema.
+    La idea del ejercicio es primero asignar a cada instrumento una partitura, para luego ir dando otra partitura al instrumento que mas cantidad de musicos tiene asignados por partitura, siendo esta la prioridad mayor.
+    Así, al final, el instrumento con mas musicos por partitura sera el que determine el maximo de musicos que tendra que tocar una misma partitura, cuya cantidad se calculara como el total de musicos asignados a ese instrumento dividido entre la cantidad de partituras que tiene asignadas, redondeando hacia arriba en caso de que no sea exacta la division.
+    El coste de la solución es O(P log I), siendo P el numero de partituras e I el numero de instrumentos, ya que primero hacemos I inserciones en la cola de prioridad, y luego P - I extracciones e inserciones adicionales, todas ellas con coste logarítmico en el numero de instrumentos, y como P >= I, el coste total es O(P log I).
+    Ademas, en medio de este proceso, solo hacemos operaciones y comprobaciones de coste y cantidad constante.
 
  @ </answer> */
 
